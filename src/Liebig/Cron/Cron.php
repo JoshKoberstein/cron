@@ -232,7 +232,8 @@ class Cron {
                     $modificationString = '- ' . abs($job['offset']) . ' seconds';
                 }
 
-                $checkTime = new DateTime($checkTime)->modify($modificationString);
+                $checkTime = new DateTime($checkTime);
+                $checkTime->modify($modificationString);
             }
 
             // If the job is enabled and if the time for this job has come
