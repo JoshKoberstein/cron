@@ -235,7 +235,7 @@ class Cron {
                 }
 
                 // make checkTime always DateTime object ( in case checkTime = 'now' )
-                if(!$checkTime instanceof DateTime)
+                if(!($checkTime instanceof \DateTime))
                 {
                     $checkTime = new \DateTime($checkTime);
                 }
