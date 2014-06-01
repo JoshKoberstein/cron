@@ -223,6 +223,8 @@ class Cron {
             // If job has an offset number of seconds, factor it in
             if ($job['offset'] <> 0)
             {
+
+                // build DateTime modification string
                 if($job['offset'] > 0)
                 {
                     $modificationString = '+ ' . abs($job['offset']) . ' seconds';
@@ -232,7 +234,13 @@ class Cron {
                     $modificationString = '- ' . abs($job['offset']) . ' seconds';
                 }
 
-                $checkTime = new \DateTime($checkTime);
+                // make checkTime always DateTime object ( in case checkTime = 'now' )
+                if(!$checkTime instanceof DateTime)
+                {
+                    $checkTime = new \DateTime($checkTime);
+                }
+                
+                // modify checkTime
                 $checkTime->modify($modificationString);
             }
 
