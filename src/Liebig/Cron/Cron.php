@@ -59,7 +59,7 @@ class Cron {
      * @param  bool $isEnabled optional If the cron job should be enabled or disabled - the standard configuration is enabled
      * @throws \InvalidArgumentException if one of the parameters has the wrong data type, is incorrect or is not set
      */
-    public static function add($name, $expression, $function, $isEnabled = true) {
+    public static function add($name, $expression, $offset = 0, $function, $isEnabled = true) {
 
         // Check if the given job name is set and is a string
         if (!isset($name) || !is_string($name)) {
@@ -69,6 +69,11 @@ class Cron {
         // Check if the given expression is set and is correct
         if (!isset($expression) || count(explode(' ', $expression)) < 5 || count(explode(' ', $expression)) > 6) {
             throw new \InvalidArgumentException('Method argument $expression is not set or invalid.');
+        }
+
+        // Check if the given offset is set and is numeric
+        if (!isset($offset) || !is_numeric($offset)) {
+            throw new \InvalidArgumentException('Method argument $offset is not set or invalid.');
         }
 
         // Check if the given closure is set and is callabale
@@ -92,7 +97,7 @@ class Cron {
         $expression = \Cron\CronExpression::factory($expression);
 
         // Add the new created cron job to the many other little cron jobs
-        array_push(self::$cronJobs, array('name' => $name, 'expression' => $expression, 'enabled' => $isEnabled, 'function' => $function));
+        array_push(self::$cronJobs, array('name' => $name, 'expression' => $expression, 'offset' => $offset, 'enabled' => $isEnabled, 'function' => $function));
     }
 
     /**
