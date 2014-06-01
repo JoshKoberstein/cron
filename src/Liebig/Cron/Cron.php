@@ -239,6 +239,10 @@ class Cron {
                 {
                     $checkTime = new \DateTime($checkTime);
                 }
+                else
+                {
+                    $checkTime = clone $checkTime;
+                }
                 
                 // modify checkTime
                 $checkTime->modify($modificationString);
