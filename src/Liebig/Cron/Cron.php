@@ -97,7 +97,7 @@ class Cron {
         $expression = \Cron\CronExpression::factory($expression);
 
         // Add the new created cron job to the many other little cron jobs
-        array_push(self::$cronJobs, array('name' => $name, 'expression' => $expression, 'offset' => $offset, 'enabled' => $isEnabled, 'function' => $function));
+        array_push(self::$cronJobs, array('name' => $name, 'expression' => $expression, 'offset' => intval($offset), 'enabled' => $isEnabled, 'function' => $function));
     }
 
     /**
@@ -219,6 +219,21 @@ class Cron {
 
         // For all defined cron jobs run this
         foreach (self::$cronJobs as $job) {
+
+            // If job has an offset number of seconds, factor it in
+            if ($job['offset'] <> 0)
+            {
+                if($job['offset'] > 0)
+                {
+                    $modificationString = '+ ' . abs($job['offset']) . ' seconds';
+                }
+                else
+                {
+                    $modificationString = '- ' . abs($job['offset']) . ' seconds';
+                }
+
+                $checkTime = new DateTime($checkTime)->modify($modificationString);
+            }
 
             // If the job is enabled and if the time for this job has come
             if ($job['enabled'] && $job['expression']->isDue($checkTime)) {
