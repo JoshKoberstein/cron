@@ -232,7 +232,7 @@ class Cron {
                     $modificationString = '- ' . abs($job['offset']) . ' seconds';
                 }
 
-                $checkTime = new DateTime($checkTime);
+                $checkTime = new \DateTime($checkTime);
                 $checkTime->modify($modificationString);
             }
 
