@@ -237,19 +237,23 @@ class Cron {
                 // make checkTime always DateTime object ( in case checkTime = 'now' )
                 if(!($checkTime instanceof \DateTime))
                 {
-                    $checkTime = new \DateTime($checkTime);
+                    $jobCheckTime = new \DateTime($checkTime);
                 }
                 else
                 {
-                    $checkTime = clone $checkTime;
+                    $jobCheckTime = clone $checkTime;
                 }
                 
                 // modify checkTime
-                $checkTime->modify($modificationString);
+                $jobCheckTime->modify($modificationString);
+            }
+            else
+            {
+                $jobCheckTime = $checkTime;
             }
 
             // If the job is enabled and if the time for this job has come
-            if ($job['enabled'] && $job['expression']->isDue($checkTime)) {
+            if ($job['enabled'] && $job['expression']->isDue($jobCheckTime)) {
 
                 // Get the start time of the job runtime
                 $beforeOne = microtime(true);
